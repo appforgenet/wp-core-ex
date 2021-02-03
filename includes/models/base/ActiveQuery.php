@@ -1,5 +1,7 @@
 <?php
-    
+namespace appforge\coreex\includes\models\base;
+
+use appforge\coreex\includes\models\WPCore;
 class ActiveQuery
 {
     private $where = [];

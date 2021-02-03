@@ -36,6 +36,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'COREEX_VERSION', '1.0.0' );
+define( 'COREEX_PLUGIN_BASE', plugin_basename(__FILE__) );
 
 /**
  * The code that runs during plugin activation.
@@ -63,6 +64,50 @@ register_deactivation_hook( __FILE__, 'deactivate_coreex' );
  * admin-specific hooks, and public-facing site hooks.
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-coreex.php';
+require plugin_dir_path( __FILE__ ) . 'includes/models/wpcore.php'; 
+
+function coreex_autoload($class_name)
+{
+    
+    //die;
+
+    // if( strpos( 'stdClass',$class_name) !== false)
+    // {
+    //     return;
+    // }
+    // else 
+    if ( 'appforge\coreex' === substr( $class_name, 0, 15 ) ) 
+    {
+        // echo $class_name.'<br />';
+
+        $path = substr( strtolower($class_name), 16 );
+        $parts = explode('\\', $path);
+        $path = dirname( __FILE__ );
+
+        foreach($parts as $part)
+            $path .= '/'.$part;
+
+        //$file     = $class_name;
+        //$path     = dirname( __FILE__ ) . '/includes/models/';
+        //$filepath = $path . $file . '.php';
+        $classfile = $path.'.php';
+
+        // If we didn't match one of our rules, bail!
+        if ( ! file_exists( $classfile ) ) {
+            return;
+        }
+
+        require $classfile;
+    }
+}
+
+spl_autoload_register( 'coreex_autoload' );
+
+/** Required core files */
+// require plugin_dir_path( __FILE__ ) . 'includes/request.php';
+// require plugin_dir_path( __FILE__ ) . 'includes/database.php';
+// require plugin_dir_path( __FILE__ ) . 'includes/wpcore.php';
+// require plugin_dir_path( __FILE__ ) . 'includes/generator/generator.php';
 
 /**
  * Begins execution of the plugin.
@@ -79,4 +124,5 @@ function run_coreex() {
 	$plugin->run();
 
 }
+appforge\coreex\includes\models\WPCore::init();
 run_coreex();

@@ -1,4 +1,5 @@
 <?php 
+namespace appforge\coreex\includes\models;
 
 class Request
 {
@@ -20,7 +21,9 @@ class Request
 
     public function post($name)
     {
-        return $this->post[$name];
+        if(array_key_exists($name, $this->post))
+            return $this->post[$name];
+        return null;
     }
 
     public function getIsGet()

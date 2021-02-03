@@ -1,4 +1,9 @@
 <?php
+
+namespace appforge\coreex\includes\models\base;
+
+use appforge\coreex\includes\models\WPCore;
+use appforge\coreex\includes\models\base\ActiveQuery;
 class ActiveRecord
 {
     /**
@@ -38,30 +43,6 @@ class ActiveRecord
     {
         $query = new ActiveQuery(static::className()); 
         return $query->where($condition)->one();
-
-        // $query = 'select * from '.static::prefix().static::tableName();
-        // if(is_array($condition))
-        // {
-        //     $key = array_key_first($condition);
-        //     $query .= ' where '.$key.' = '.$condition[$key]; 
-        // }
-        // else
-        // {
-        //     //primary = 
-        // }
-
-        // $wpdb = static::getDb();
-        // $items = $wpdb->get_results($query);
-
-        // $model = new static();
-        // $item = $items[0];
-        // foreach(static::getSchema() as $row)
-        // {
-        //     $column = $row->Field;
-        //     $model->_attributes[$column] = $item->$column;
-        //     $model->_oldAttributes[$column] = $item->$column;
-        // }
-        // return $model;
     }
 
     static function findAll()
@@ -74,16 +55,11 @@ class ActiveRecord
 
     function setOldAttribute($name, $value)
     {
-        // if($this->hasAttribute($name))
-        //     $this->_oldAttributes[$name] = $value;
-        // else
             $this->_oldAttributes[$name] = $value;
-
     }
 
     function setAttribute($name, $value)
     {
-        // if($this->hasAttribute($name))
             $this->_attributes[$name] = $value;
     }
 
@@ -127,10 +103,9 @@ class ActiveRecord
     {
         if($this->hasAttribute($name))
             return $this->_attributes[$name];
-        //var_dump($this->_relationDependencies);
+
         if(array_key_exists($name, $this->_relationDependencies))
         {
-            //echo 'dependencie gefunden'."<br />";
             if(!array_key_exists($name, $this->_relation))
             {
                 //populate
@@ -138,10 +113,6 @@ class ActiveRecord
             }
             return $this->_relation[$name];
         }
-        
-        // else
-        //     return $this->$name;
-        //if()
     }
 
     private function populateRelation($name)

@@ -1,4 +1,11 @@
 <?php
+
+namespace appforge\coreex\includes\models;
+
+use appforge\coreex\includes\models\Request;
+use appforge\coreex\includes\models\WPCore;
+use appforge\coreex\includes\models\Database;
+
     class WPCore
     {
         /** @var WPCore $wpcore */

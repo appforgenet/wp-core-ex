@@ -155,7 +155,17 @@ class Coreex {
 		$plugin_admin = new Coreex_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+        $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
+        $this->loader->add_action( 'wp_print_scripts', $plugin_admin, 'enqueue_styles_test' );
+		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+        
+        /** Code Generator */
+        $this->loader->add_action( 'init', $plugin_admin, 'register_route' );
+        $this->loader->add_action( 'rest_api_init', $plugin_admin, 'rest_api_init' );
+        $this->loader->add_filter( 'template_include', $plugin_admin, 'template_redirect' );
+        $this->loader->add_filter( 'plugin_action_links_'.COREEX_PLUGIN_BASE, $plugin_admin, 'plugin_action_links' );
+        $this->loader->add_filter( 'plugin_row_meta', $plugin_admin, 'plugin_row_meta',10, 2 );
 
 	}
 

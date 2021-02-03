@@ -1,4 +1,6 @@
 <?php
+namespace appforge\coreex\includes\models;
+
 class Database
 {
     public $wpdb;

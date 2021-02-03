@@ -1,0 +1,98 @@
+
+ 
+  .autocomplete-dropdown 
+  {
+     border: 1px solid #cacaca;
+     /* width: 200px; */
+     display: block;
+     position: absolute;
+     background-color: #ffffff;
+  }
+ 
+  #autocomplete-items a.autocomplete-item
+  {
+      display: block;
+      text-decoration: none;
+      padding-left: 15px;
+      padding-right: 15px;
+  }
+ 
+  #autocomplete-items a.autocomplete-item.active
+  {
+      background-color: #0366d6;
+      color: #ffffff;
+  }
+ 
+  .form-group label{
+     display: block;
+  }
+ 
+  .hint
+  {
+     font-size: smaller; 
+  }
+ 
+  input[type=text]
+  {
+     width: 100%;
+  }
+
+  .navbar-brand img
+  {
+    height: 50px;
+  }
+
+  .bg-appforge
+  {
+      /* background-color: #e2f3fa; */ 
+        -moz-box-shadow:    0px 0px 5px 3px #ccc;
+        -webkit-box-shadow: 0px 0px 5px 3px #ccc;
+        box-shadow:         0px 0px 5px 3px #ccc;
+  }
+
+  main,#sidebarMenu
+  {
+      padding-top: 85px;
+  }
+
+  footer 
+  {
+    border-top: 1px solid #bbb;
+    text-align: center;
+  }
+
+  .sidebar a
+  {
+      color: #000;
+  }
+  .sidebar a.nav-link.active
+  {
+      color: #007bff;
+      font-weight: 500;
+  }
+
+  .diff td{
+    vertical-align : top;
+    white-space    : pre;
+    white-space    : pre-wrap;
+    font-family    : monospace;
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .diff .diffDeleted
+  {
+      background-color: lightcoral;
+  }
+
+  .diff .diffInserted
+  {
+      background-color: lightgreen;
+  }
+
+  .col-source, .col-dest
+  {
+    width: 45%;
+  }

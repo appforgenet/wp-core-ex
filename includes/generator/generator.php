@@ -1,5 +1,10 @@
 <?php
-class MyGenerator
+
+namespace appforge\coreex\includes\generator;
+use appforge\coreex\includes\models\WPCore;
+use appforge\coreex\includes\generator\Diff;
+use \stdClass;
+class Generator
 {
     private $dbName;
     private $data;
@@ -13,10 +18,13 @@ class MyGenerator
     public function generate($data)
     {
         $this->data = $data;
+        $files = [];
         //model
+        if(isset($this->data['filedoaction']) && isset($data['filedoaction'][0]))
+        {
         $file = $this->render($this->getCodeTemplate().'/model.php', ['generator' => $this, 'properties' => $this->generateProperties(),'tableName' => str_replace($this->getDbPrefix(), '', $this->getTableName()), 'baseclass' => $this->getBaseClass(),'modelclass' => $this->getModelName(), 'prefix' => $this->getDbPrefix() ]);
         $destinationFile = $this->getPath().'/'.$this->getModelName().'.php';
-        if(is_file($destinationFile))
+        if(file_exists($destinationFile))
             unlink($destinationFile);
         file_put_contents($destinationFile, $file);
         
@@ -24,7 +32,55 @@ class MyGenerator
         //$this->getConstrains($this->getTableName());
         //var_dump(json_encode( $this->_debug));
         
-        return $destinationFile;
+        $files[] = 'created - '.$destinationFile;
+        }
+
+        return $files;
+    }
+
+    public function preGenerate($data)
+    {
+        // echo plugin_dir_path(__FILE__);
+        // return;
+        $this->data = $data;
+        $files = [];
+        $file = new stdClass(); 
+        $file->filename = $this->getModelName().'.php';
+        $file->destination = $this->getPath().'/'.$file->filename;
+        //$file->generated = file_exists($file->destination) ? 'Generate':'Overwrite';
+        
+
+        //model
+        $fileData = $this->render($this->getCodeTemplate().'/model.php', ['generator' => $this, 'properties' => $this->generateProperties(),'tableName' => str_replace($this->getDbPrefix(), '', $this->getTableName()), 'baseclass' => $this->getBaseClass(),'modelclass' => $this->getModelName(), 'prefix' => $this->getDbPrefix() ]);
+        if(!is_dir(plugin_dir_path(__FILE__).'../../tmp/'))
+            mkdir(plugin_dir_path(__FILE__).'../../tmp/');
+
+        $destinationFile = plugin_dir_path(__FILE__).'../../tmp/'.$file->filename;
+        $file->tmp = $destinationFile;
+
+        if(file_exists($destinationFile))
+            unlink($destinationFile);
+        file_put_contents($destinationFile, $fileData);
+
+        //compare
+        $emptytemp = plugin_dir_path(__FILE__).'../../tmp/empty.tmp';
+        if(!file_exists($emptytemp))
+            file_put_contents($emptytemp, '');
+
+        if(file_exists($file->destination))
+            $compareresult = Diff::compareFiles($file->destination, $destinationFile, false);
+        else
+            $compareresult = Diff::compareFiles($emptytemp, $destinationFile, false);
+
+        $file->generated = Diff::changeState($compareresult);
+
+        //var_dump($compareresult);
+        //$file->compareresult = Diff::toHTML(Diff::compareFiles($file->destination, $destinationFile));
+        $header = [['name' => ''],['name' => 'Source', 'class' => 'col-source'],['name' => ''],['name' => 'Destination', 'class' => 'col-dest']];
+         $file->compareresult = Diff::toTable($compareresult, '', '<br />', $header);
+        //$file->compareresult = Diff::compareFiles($file->destination, $destinationFile, 999);
+        $files[] = $file;
+        return $files;
     }
 
     public function getTableName()
